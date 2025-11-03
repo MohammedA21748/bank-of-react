@@ -1,36 +1,59 @@
 /*==================================================
 src/components/Debits.js
 
-The Debits component contains information for Debits page view.
-Note: You need to work on this file for the Assignment.
+I display debits and let the user add new ones.
 ==================================================*/
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import AccountBalance from './AccountBalance';
 
-const Debits = (props) => {
-  // Create the list of Debit items
-  let debitsView = () => {
-    const { debits } = props;
-    return debits.map((debit) => {  // Extract "id", "amount", "description" and "date" properties of each debits JSON array element
-      let date = debit.date.slice(0,10);
-      return <li key={debit.id}>{debit.amount} {debit.description} {date}</li>
-    });
+class Debits extends Component {
+  render() {
+    return (
+      <div>
+        <h1>Debits</h1>
+
+        {/* I show link back home */}
+        <Link to="/">Home</Link>
+        <br /><br />
+
+        {/* I show each debit entry */}
+        {this.props.debits.map((debit, index) => (
+          <div key={index}>
+            <p>Description: {debit.description}</p>
+            <p>Amount: ${Number(debit.amount).toFixed(2)}</p>
+            <p>Date: {debit.date.slice(0, 10)}</p>
+            <hr />
+          </div>
+        ))}
+
+        {/* I form to add a debit */}
+        <form onSubmit={(e) => {
+          e.preventDefault();
+
+          const newDebit = {
+            description: e.target.description.value,
+            amount: parseFloat(e.target.amount.value),
+            date: new Date().toISOString()
+          };
+
+          this.props.addDebit(newDebit);
+          e.target.reset();
+        }}>
+          <input name="description" type="text" placeholder="Description" required />
+          <input name="amount" type="number" step="0.01" placeholder="Amount" required />
+          <button type="submit">Add Debit</button>
+        </form>
+
+        <br />
+
+        {/* I show updated balance */}
+        <AccountBalance accountBalance={this.props.accountBalance} />
+      </div>
+    );
   }
-  // Render the list of Debit items and a form to input new Debit item
-  return (
-    <div>
-      <h1>Debits</h1>
-
-      {debitsView()}
-
-      <form onSubmit={props.addDebit}>
-        <input type="text" name="description" />
-        <input type="number" name="amount" />
-        <button type="submit">Add Debit</button>
-      </form>
-      <br/>
-      <Link to="/">Return to Home</Link>
-    </div>
-  );
 }
 
 export default Debits;
+
+

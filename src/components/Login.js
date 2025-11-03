@@ -1,8 +1,5 @@
 /*==================================================
 src/components/Login.js
-
-The LogIn component is used to demonstrate the use of Redirect.
-Note: You don't need to work on this file for the Assignment.
 ==================================================*/
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
